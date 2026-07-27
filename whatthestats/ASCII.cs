@@ -10,7 +10,7 @@ internal static class ASCII
         int empty = width - filled;
 
         // Custom characters: █ (filled), ░ (empty)
-        string bar = new string('█', filled) + new string('░', empty);
+        string bar = new string('█', filled - 1) + '░' + new string('-', empty);
         return $"[{bar}] {percentage}";
     }
 }

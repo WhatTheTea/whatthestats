@@ -16,10 +16,12 @@ public sealed class LanguageUsageRedactor(Stream readmeStream, LanguagesUsage us
         var languagesBlockBuilder = new StringBuilder();
 
         languagesBlockBuilder.AppendLine("Languages:");
-        foreach (var use in usage.Values.OrderByDescending(x => x.Usage).Take(10))
+        var topUsedLanguages = usage.Values.OrderByDescending(x => x.Usage).Take(10);
+        var maxWidth = topUsedLanguages.Max(x => x.Language.Length);
+        foreach (var use in topUsedLanguages)
         {
             var usageBar = ASCII.ProgressBar(use.Usage);
-            languagesBlockBuilder.AppendLine($"{use.Language}: {usageBar}");
+            languagesBlockBuilder.AppendLine($"{use.Language.PadRight(maxWidth)}: {usageBar}");
         }   
         readme = readme.Remove(block.Start.Value, length);
         readme = readme.Insert(block.Start.Value, Environment.NewLine + languagesBlockBuilder.ToString());
