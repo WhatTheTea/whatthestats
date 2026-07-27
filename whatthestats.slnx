@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="whatthestats.tests/whatthestats.tests.csproj" />
+  <Project Path="whatthestats/whatthestats.csproj" />
+</Solution>
