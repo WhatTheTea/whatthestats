@@ -15,7 +15,6 @@ public sealed class LanguageUsageRedactor(Stream readmeStream, LanguagesUsage us
         (var offset, var length) = block.GetOffsetAndLength(readme.Length);
         var languagesBlockBuilder = new StringBuilder();
 
-        languagesBlockBuilder.AppendLine("Languages:");
         var topUsedLanguages = usage.Values.OrderByDescending(x => x.Usage).Take(10);
         var maxWidth = topUsedLanguages.Max(x => x.Language.Length);
         foreach (var use in topUsedLanguages)
