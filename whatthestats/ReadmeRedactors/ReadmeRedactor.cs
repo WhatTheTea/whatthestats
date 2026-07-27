@@ -9,12 +9,15 @@ public abstract class ReadmeRedactor(Stream readmeStream) : IDisposable
 
     public abstract Task ApplyAsync();
 
-    protected int GetWritingIndex(string readme)
+    protected Range GetBlockRange(string readme)
     {
         string beginning = $"```{RedactorAlias}";
-        var index = readme.IndexOf(beginning);
+        var startIndex = readme.IndexOf(beginning);
+        var start = startIndex > 0 ? startIndex + beginning.Length : readme.Length;
+        var endIndex = readme[start..].IndexOf("```");
+        var end = endIndex > 0 ? endIndex + start : readme.Length;
 
-        return index > 0 ? index : readme.Length;
+        return new Range(start, end);
     } 
 
     protected virtual void Dispose(bool disposing)

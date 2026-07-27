@@ -11,7 +11,8 @@ public sealed class LanguageUsageRedactor(Stream readmeStream, LanguagesUsage us
     public override async Task ApplyAsync()
     {
         var readme = reader.ReadToEnd();
-        var start = GetWritingIndex(readme);
+        var block = GetBlockRange(readme);
+        (var offset, var length) = block.GetOffsetAndLength(readme.Length);
         var languagesBlockBuilder = new StringBuilder();
 
         languagesBlockBuilder.AppendLine("Languages:");
@@ -20,8 +21,8 @@ public sealed class LanguageUsageRedactor(Stream readmeStream, LanguagesUsage us
             var usageBar = ASCII.ProgressBar(use.Usage);
             languagesBlockBuilder.AppendLine($"{use.Language}: {usageBar}");
         }   
-
-        readme = readme.Insert(start, languagesBlockBuilder.ToString());
+        readme = readme.Remove(block.Start.Value, length);
+        readme = readme.Insert(block.Start.Value, Environment.NewLine + languagesBlockBuilder.ToString());
 
         readmeStream.Seek(0, SeekOrigin.Begin);
         writer.Write(readme);
